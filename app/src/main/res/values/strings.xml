@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">2Recipe</string>
+    <string name="action_settings">Settings</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="or">OR</string>
+    <string name="enter_recipe">Enter Recipe Name</string>
+    <string name="title_activity_results">ResultsActivity</string>
+</resources>
