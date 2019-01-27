@@ -1,0 +1,119 @@
+[
+    {
+        "label": "Chicken Vesuvio",
+        "source": "Serious Eats",
+        "url": "http://www.seriouseats.com/recipes/2011/12/chicken-vesuvio-recipe.html",
+        "ingredientLines": [
+            "1/2 cup olive oil",
+            "5 cloves garlic, peeled",
+            "2 large russet potatoes, peeled and cut into chunks",
+            "1 3-4 pound chicken, cut into 8 pieces (or 3 pound chicken legs)",
+            "3/4 cup white wine",
+            "3/4 cup chicken stock",
+            "3 tablespoons chopped parsley",
+            "1 tablespoon dried oregano",
+            "Salt and pepper",
+            "1 cup frozen peas, thawed"
+        ],
+        "cautions": [],
+        "healthLabels": [
+            "Peanut-Free",
+            "Tree-Nut-Free"
+        ],
+        "calories": 4230.305691201081,
+        "image": "https://www.edamam.com/web-img/e42/e42f9119813e890af34c259785ae1cfb.jpg"
+    },
+    {
+        "label": "Chicken Paprikash",
+        "source": "No Recipes",
+        "url": "http://norecipes.com/recipe/chicken-paprikash/",
+        "ingredientLines": [
+            "640 grams chicken - drumsticks and thighs ( 3 whole chicken legs cut apart)",
+            "1/2 teaspoon salt",
+            "1/4 teaspoon black pepper",
+            "1 tablespoon butter \u2013 cultured unsalted (or olive oil)",
+            "240 grams onion sliced thin (1 large onion)",
+            "70 grams Anaheim pepper chopped (1 large pepper)",
+            "25 grams paprika (about 1/4 cup)",
+            "1 cup chicken stock",
+            "1/2 teaspoon salt",
+            "1/2 cup sour cream",
+            "1 tablespoon flour \u2013 all-purpose"
+        ],
+        "cautions": [],
+        "healthLabels": [
+            "Peanut-Free",
+            "Tree-Nut-Free",
+            "Alcohol-Free"
+        ],
+        "calories": 3033.2012500008163,
+        "image": "https://www.edamam.com/web-img/e12/e12b8c5581226d7639168f41d126f2ff.jpg"
+    },
+    {
+        "label": "Chicken Gravy",
+        "source": "Martha Stewart",
+        "url": "http://www.marthastewart.com/332664/chicken-gravy",
+        "ingredientLines": [
+            "4 cups chicken bones and wings",
+            "2 tablespoons unsalted butter, softened",
+            "2 tablespoons all-purpose flour",
+            "4 cups homemade bruce and eric bromberg's chicken stock, or store-bought low-sodium chicken stock",
+            "1 tablespoon fresh thyme leaves",
+            "Coarse salt and freshly ground black pepper"
+        ],
+        "cautions": [
+            "Gluten",
+            "Wheat"
+        ],
+        "healthLabels": [
+            "Sugar-Conscious",
+            "Peanut-Free",
+            "Tree-Nut-Free",
+            "Alcohol-Free"
+        ],
+        "calories": 1092.360634999871,
+        "image": "https://www.edamam.com/web-img/fd1/fd1afed1849c44f5185720394e363b4e.jpg"
+    },
+    {
+        "label": "Catalan Chicken",
+        "source": "Bon Appetit",
+        "url": "http://www.bonappetit.com/columns/breadwinner/article/how-to-get-your-kids-to-eat-sauce-let-them-cook-it-themselves",
+        "ingredientLines": [
+            "1 whole 4-pound chicken, quartered",
+            "8 slices bacon",
+            "30 cloves garlic",
+            "3 lemons, peeled, rinds thinly sliced and reserved",
+            "\u00bd cup Banyuls or another fortified dessert wine",
+            "1 cup veal or chicken stock"
+        ],
+        "cautions": [],
+        "healthLabels": [
+            "Sugar-Conscious",
+            "Peanut-Free",
+            "Tree-Nut-Free"
+        ],
+        "calories": 3298.8,
+        "image": "https://www.edamam.com/web-img/4d9/4d9084cbc170789caa9e997108b595de.jpg"
+    },
+    {
+        "label": "Citrus Roasted Chicken",
+        "source": "Food52",
+        "url": "https://food52.com/recipes/3403-citrus-roasted-chicken",
+        "ingredientLines": [
+            "1 chicken, about 3.5 to 4 pounds",
+            "1 lemon",
+            "1 blood orange",
+            "1 tangerine or clementine",
+            "Kosher salt",
+            "1/2 cup chicken broth"
+        ],
+        "cautions": [],
+        "healthLabels": [
+            "Peanut-Free",
+            "Tree-Nut-Free",
+            "Alcohol-Free"
+        ],
+        "calories": 2643.1901685250004,
+        "image": "https://www.edamam.com/web-img/d4b/d4bb1e6c7a6c3738d8e01707eb0ad83d.jpg"
+    }
+]

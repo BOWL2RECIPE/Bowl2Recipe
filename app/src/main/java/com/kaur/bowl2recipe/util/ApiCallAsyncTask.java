@@ -1,10 +1,15 @@
 package com.kaur.bowl2recipe.util;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
+
+import com.kaur.bowl2recipe.MainActivity;
 
 public class ApiCallAsyncTask extends AsyncTask<Void,Void, String> {
+    public static final String TAG = ApiCallAsyncTask.class.getSimpleName();
     String mPayload;
     boolean mIsRecipe;
     Util.OnAsyncCompleteListener mOnAsyncCompleteListener;
@@ -20,6 +25,9 @@ public class ApiCallAsyncTask extends AsyncTask<Void,Void, String> {
     //TODO Add server api calls
     @Override
     protected String doInBackground(Void... voids) {
+        Context context = (Context) mOnAsyncCompleteListener;
+        String response = Util.loadJSONFromAsset(context);
+
         if (mIsRecipe) {
 
         } else {
@@ -27,7 +35,7 @@ public class ApiCallAsyncTask extends AsyncTask<Void,Void, String> {
         }
 
 
-        return null;
+        return response;
     }
 
     @Override

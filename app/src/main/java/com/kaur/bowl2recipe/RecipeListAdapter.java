@@ -2,6 +2,7 @@ package com.kaur.bowl2recipe;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,12 @@ import org.json.JSONObject;
 
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.MyViewHolder> {
+    static final String TAG = RecipeListAdapter.class.getSimpleName();
     JSONArray mRecipeJsonArray;
     Util.RecyclerViewClickListener mRecyclerViewClickListener;
 
     public RecipeListAdapter(JSONArray recipeJsonArray, Util.RecyclerViewClickListener recyclerViewClickListener) {
-        this.mRecipeJsonArray = recipeJsonArray;
+        mRecipeJsonArray = recipeJsonArray;
         mRecyclerViewClickListener = recyclerViewClickListener;
     }
 
@@ -31,7 +33,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.My
     public RecipeListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_row, parent, false);
-
+        Log.d(TAG, "onCreateViewHolder: Size : " + mRecipeJsonArray.length());
         return new MyViewHolder(itemView);
     }
 
@@ -40,8 +42,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.My
         try {
             JSONObject item = (JSONObject) mRecipeJsonArray.get(i);
             String imageUrl = item.getString("image");
-            Picasso.get().load(imageUrl).fit().into(myViewHolder.dishImage);
-            myViewHolder.dishName.setText(item.getString("name"));
+            Log.d(TAG, "onBindViewHolder: image : " + imageUrl);
+            Picasso.get().load(imageUrl).placeholder(R.mipmap.loading_image).into(myViewHolder.dishImage);
+            myViewHolder.dishName.setText(item.getString("label"));
             myViewHolder.healthLabel.setText(Util.toCSV(item.getJSONArray("healthLabels")));
         } catch (JSONException e) {
             e.printStackTrace();

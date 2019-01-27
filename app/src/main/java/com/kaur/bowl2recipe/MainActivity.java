@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompleteListener {
     static final int GALLERY_REQUEST = 101;
     static final int REQUEST_TAKE_PHOTO = 102;
     public static final String RECIPE_LIST_JSON = "recipe_list_json";
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String recipeName = recipeNameEditText.getText().toString();
                 if (!TextUtils.isEmpty(recipeName)) {
-                    ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeName, true, null, onAsyncCompleteListener);
+                    ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeName, true, null, MainActivity.this);
                     apiCallAsyncTask.execute();
                 } else {
                     Toast.makeText(MainActivity.this, R.string.type_valid_dish, Toast.LENGTH_LONG).show();
@@ -82,35 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    Util.OnAsyncCompleteListener onAsyncCompleteListener = new Util.OnAsyncCompleteListener() {
-        @Override
-        public void onComplete(String response) {
-            mProgressBar.setVisibility(View.GONE);
-
-            //TODO Check if looking for empty string is the correct way to go
-            if (!TextUtils.isEmpty(response)) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    Intent myIntent = new Intent(MainActivity.this, ResultsActivity.class);
-                    myIntent.putExtra(RECIPE_LIST_JSON, response); //Optional parameters
-                    MainActivity.this.startActivity(myIntent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();
-
-                }
-            } else {
-                Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();
-
-            }
-
-        }
-    };
 
     public void makeNetworkCall(String payload, boolean isRecipe, Bitmap bitmap) {
         if (Util.isNetworkAvailable(this)) {
             mProgressBar.setVisibility(View.VISIBLE);
-            ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(payload, isRecipe, bitmap, onAsyncCompleteListener);
+            ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(payload, isRecipe, bitmap, this);
             apiCallAsyncTask.execute();
         } else {
             Toast.makeText(this, R.string.check_network, Toast.LENGTH_LONG).show();
@@ -193,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK) {
-            switch (requestCode){
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
                 case GALLERY_REQUEST:
                     Uri selectedImage = data.getData();
                     try {
@@ -222,8 +198,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onComplete(String response) {
+        mProgressBar.setVisibility(View.GONE);
 
+        //TODO Check if looking for empty string is the correct way to go
+        if (!TextUtils.isEmpty(response)) {
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                Intent myIntent = new Intent(MainActivity.this, ResultsActivity.class);
+                myIntent.putExtra(RECIPE_LIST_JSON, response); //Optional parameters
+                MainActivity.this.startActivity(myIntent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();
 
+            }
+        } else {
+            Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();
 
+        }
+    }
 
 }
