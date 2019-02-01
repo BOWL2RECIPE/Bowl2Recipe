@@ -28,7 +28,7 @@ public class ResultsActivity extends AppCompatActivity implements Util.RecyclerV
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        setTitle(R.string.app_name);
         mRecyclerView = findViewById(R.id.recycler_view_recipe);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

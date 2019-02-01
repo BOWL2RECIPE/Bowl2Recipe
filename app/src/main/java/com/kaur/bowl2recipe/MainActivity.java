@@ -45,11 +45,11 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         mCameraButton = findViewById(R.id.camera_button);
         mProgressBar = findViewById(R.id.progressBar);
         final EditText recipeNameEditText = findViewById(R.id.recipe_edit_text_view);
+        recipeNameEditText.setMaxWidth(recipeNameEditText.getWidth());
+
         Button sendButton = findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

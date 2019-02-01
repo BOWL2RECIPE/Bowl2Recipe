@@ -8,54 +8,61 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:foregroundGravity="center_horizontal|center_vertical"
         android:layout_width="wrap_content"
-        android:visibility="gone"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center_horizontal|center_vertical"
+        android:visibility="gone" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="4dp"
-                android:src="@mipmap/bowl_logo" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:text="@string/app_name"
-                android:textSize="20sp" />
-
-        </LinearLayout>
 
         <ImageView
-            android:id="@+id/camera_button"
             android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:src="@mipmap/camera" />
+            android:layout_marginTop="72dp"
+            android:layout_marginRight="4dp"
+            android:src="@mipmap/bowl_logo_1" />
 
-        <Button
-            android:id="@+id/upload_button"
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="4dp"
             android:layout_marginTop="20dp"
-            android:text="@string/upload_image" />
+            android:text="@string/app_name"
+            android:textColor="@android:color/background_light"
+            android:textSize="32sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center_horizontal"
+
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/camera_button"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="16dp"
+                android:src="@mipmap/camera_icon_50" />
+
+            <Button
+                android:id="@+id/upload_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:text="@string/upload_image" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -64,20 +71,32 @@
             android:layout_marginTop="20dp"
             android:text="@string/or" />
 
-        <EditText
-            android:id="@+id/recipe_edit_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+        <LinearLayout
             android:layout_marginTop="20dp"
-            android:hint="@string/enter_recipe" />
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:text="@string/send" />
+            <EditText
+                android:id="@+id/recipe_edit_text_view"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:hint="@string/enter_recipe" />
+
+            <Button
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="@string/send" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
