@@ -1,5 +1,6 @@
 package com.kaur.bowl2recipe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 
 public class ResultsActivity extends AppCompatActivity implements Util.RecyclerViewClickListener {
     public static final String TAG = ResultsActivity.class.getSimpleName();
+    public static final String RECIPE_JSON = "recipe_json";
     RecyclerView mRecyclerView;
     JSONArray mRecipeJsonArray;
 
@@ -49,6 +51,10 @@ public class ResultsActivity extends AppCompatActivity implements Util.RecyclerV
         try {
             JSONObject recipeJsonObject = (JSONObject) mRecipeJsonArray.get(position);
             Log.d(TAG, "onClick: " + recipeJsonObject.toString());
+
+            Intent myIntent = new Intent(this, RecipeViewActivity.class);
+            myIntent.putExtra(RECIPE_JSON, recipeJsonObject.toString()); //Optional parameters
+            startActivity(myIntent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
