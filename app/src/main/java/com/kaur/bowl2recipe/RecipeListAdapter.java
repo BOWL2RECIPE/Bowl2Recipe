@@ -75,6 +75,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.My
         @Override
         public void onClick(View v) {
             mRecyclerViewClickListener.onClick(v, getLayoutPosition());
+
         }
     }
 }
