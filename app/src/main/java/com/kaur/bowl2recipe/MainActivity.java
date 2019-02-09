@@ -29,6 +29,8 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
     static final int GALLERY_REQUEST = 101;
     static final int REQUEST_TAKE_PHOTO = 102;
     public static final String RECIPE_LIST_JSON = "recipe_list_json";
+    public static final String RECIPE_INFO = "%s/recipe-info?recipe_name=%s";
+    public static final String RECIPE_NAME = "%s/recipe-name";
 
     Uri mPhotoUri;
     ImageView mCameraButton;
@@ -55,12 +59,17 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
             @Override
             public void onClick(View v) {
                 String recipeName = recipeNameEditText.getText().toString();
-                if (!TextUtils.isEmpty(recipeName)) {
-                    ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeName, true, null, MainActivity.this);
-                    apiCallAsyncTask.execute();
-                } else {
-                    Toast.makeText(MainActivity.this, R.string.type_valid_dish, Toast.LENGTH_LONG).show();
-
+                try{
+                    if (!TextUtils.isEmpty(recipeName)) {
+                        String recipeInfoUrl = String.format(RECIPE_INFO, getString(R.string.api_call), URLEncoder.encode(recipeName, "UTF-8"));
+                        ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeInfoUrl, true, null, MainActivity.this);
+                        apiCallAsyncTask.execute();
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.type_valid_dish, Toast.LENGTH_LONG).show();
+                    }
+                }
+                catch (UnsupportedEncodingException e){
+                    Log.e("Encoding", "Error Stack: "+e.getStackTrace());
                 }
             }
         });
@@ -78,15 +87,14 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
                 loadImagefromGallery(v);
             }
         });
-
-
     }
 
 
     public void makeNetworkCall(String payload, boolean isRecipe, Bitmap bitmap) {
         if (Util.isNetworkAvailable(this)) {
             mProgressBar.setVisibility(View.VISIBLE);
-            ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(payload, isRecipe, bitmap, this);
+            String recipeNameUrl = String.format(RECIPE_NAME, getString(R.string.api_call));
+            ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeNameUrl, isRecipe, bitmap, this);
             apiCallAsyncTask.execute();
         } else {
             Toast.makeText(this, R.string.check_network, Toast.LENGTH_LONG).show();
