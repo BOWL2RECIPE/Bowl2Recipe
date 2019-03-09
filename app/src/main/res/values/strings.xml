@@ -3,10 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="upload_image">Upload Image</string>
     <string name="or">OR</string>
-    <string name="enter_recipe">Enter Recipe Name</string>
+    <string name="enter_recipe">Enter Recipe Name or Ingredients</string>
     <string name="title_activity_results">ResultsActivity</string>
     <string name="send">Send</string>
-    <string name="api_call">https://project-learning-201509.appspot.com/api</string>
+    <string name="api_call">https://bowl-recipe-95393.appspot.com/api</string>
     <string name="check_network">Please check your network connection.</string>
     <string name="type_valid_dish">Please type a valid dish name.</string>
     <string name="dish_not_found">Dish not found. Please try with a different dish or image.</string>
