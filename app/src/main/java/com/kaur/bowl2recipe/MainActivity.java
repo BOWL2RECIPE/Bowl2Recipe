@@ -4,19 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -230,7 +228,8 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
     private void getRecipeName(Bitmap bitmap) {
         JSONObject imageJson = null;
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            // Add the image
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
             byte[] imageArray = stream.toByteArray();
             String base64Image = Base64.encodeToString(imageArray, Base64.DEFAULT);
             Log.e(TAG, "[image content]" + base64Image);
