@@ -17,6 +17,6 @@ Steps:
 
 Future enhacements:
 
-    Search for the recipe using recipe image. (Build phase)
-    Make the URL clickable. (Build phase)
+    Search for the recipe using recipe image. (Completed)
+    Make the URL clickable. (Completed)
 
