@@ -4,19 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,6 +24,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.kaur.bowl2recipe.util.ApiCallAsyncTask;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
     public static final String RECIPE_INFO = "%s/recipe-info?recipe_name=%s";
     public static final String RECIPE_NAME = "%s/recipe-name";
     public static final String TAG = "MainActivity";
-    public RequestQueue requestQueue = Volley.newRequestQueue(this);
+    public RequestQueue requestQueue;
 
     Uri mPhotoUri;
     ImageView mCameraButton;
@@ -60,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        requestQueue = getRequestQueue();
+
         mCameraButton = findViewById(R.id.camera_button);
         mProgressBar = findViewById(R.id.progressBar);
         final EditText recipeNameEditText = findViewById(R.id.recipe_edit_text_view);
@@ -98,6 +100,13 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
                 loadImagefromGallery(v);
             }
         });
+    }
+
+    private RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(this);
+        }
+        return requestQueue;
     }
 
 
@@ -217,51 +226,43 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
     }
 
     private void getRecipeName(Bitmap bitmap) {
-        AsyncTask<Bitmap, Integer, String> recipeNameTask = new MainActivity.RecipeNameAsyncTask();
-        recipeNameTask.execute(bitmap);
-    }
-
-    private class RecipeNameAsyncTask extends AsyncTask<Bitmap, Integer, String> {
-        @Override
-        protected String doInBackground(Bitmap... bitmaps) {
-            ByteArrayOutputStream stream = null;
-            JSONObject imageJson = null;
-            try {
-                stream = new ByteArrayOutputStream();
-                bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 50, stream);
-                byte[] imageArray = stream.toByteArray();
-                String base64Image = Base64.encodeToString(imageArray, Base64.DEFAULT);
-                imageJson = new JSONObject();
-                imageJson.put("content", base64Image);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } finally {
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            JsonObjectRequest recipeNameRequest = new JsonObjectRequest(Request.Method.POST,
-                    String.format(RECIPE_NAME, getString(R.string.api_call)), imageJson,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.e(TAG, response.toString());
-                        }
-                    }, null) {
-            };
-            requestQueue.add(recipeNameRequest);
-            return null;
+        JSONObject imageJson = null;
+        try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+            // Add the image
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+            byte[] imageArray = stream.toByteArray();
+            String base64Image = Base64.encodeToString(imageArray, Base64.DEFAULT);
+            Log.e(TAG, "[image content]" + base64Image);
+            imageJson = new JSONObject();
+            imageJson.put("content", base64Image);
+        } catch (IOException | JSONException e) {
+            Log.e(TAG, "Exception Occured", e);
         }
-    }
 
+        JsonObjectRequest recipeNameRequest = new JsonObjectRequest(Request.Method.POST,
+                String.format(RECIPE_NAME, getString(R.string.api_call)), imageJson,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "[Response]" + response.toString(2));
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Exception Occured", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Exception in request", error);
+                    }
+                });
+        requestQueue.add(recipeNameRequest);
+    }
 
     @Override
     public void onComplete(String response) {
-        mProgressBar.setVisibility(View.GONE);
+//        mProgressBar.setVisibility(View.GONE);
 
         //TODO Check if looking for empty string is the correct way to go
         if (!TextUtils.isEmpty(response)) {
