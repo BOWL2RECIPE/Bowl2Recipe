@@ -204,8 +204,6 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                         getRecipeName(bitmap);
-//                        makeNetworkCall(null, false, bitmap);
-//                        mCameraButton.setImageBitmap(bitmap);
                     } catch (IOException e) {
                         Log.i("TAG", "Some exception " + e);
                     }
@@ -216,8 +214,6 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mPhotoUri);
                         getRecipeName(bitmap);
-//                        makeNetworkCall(null, false, bitmap);
-//                        mCameraButton.setImageBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -227,6 +223,8 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
 
     private void getRecipeName(Bitmap bitmap) {
         JSONObject imageJson = null;
+        mProgressBar.setVisibility(View.VISIBLE);
+
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             // Add the image
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
@@ -246,6 +244,26 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
                     public void onResponse(JSONObject response) {
                         try {
                             Log.e(TAG, "[Response]" + response.toString(2));
+                            String recipe_name_str = response.toString();
+                            JSONObject jsonResult = new JSONObject(recipe_name_str);
+                            JSONArray labels = jsonResult.getJSONArray("labels");
+
+                            JSONObject c = labels.getJSONObject(0);
+                            String recipeName = c.getString("name");
+
+                            Log.e(TAG, "[Response]" + recipeName);
+                            try{
+                                if (!TextUtils.isEmpty(recipeName)) {
+                                    String recipeInfoUrl = String.format(RECIPE_INFO, getString(R.string.api_call), URLEncoder.encode(recipeName, "UTF-8"));
+                                    ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeInfoUrl, true, null, MainActivity.this);
+                                    apiCallAsyncTask.execute();
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            catch (UnsupportedEncodingException e){
+                                Log.e("Encoding", "Error Stack: "+e.getStackTrace());
+                            }
                         } catch (JSONException e) {
                             Log.e(TAG, "Exception Occured", e);
                         }
@@ -262,15 +280,14 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
 
     @Override
     public void onComplete(String response) {
-//        mProgressBar.setVisibility(View.GONE);
 
-        //TODO Check if looking for empty string is the correct way to go
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 Intent myIntent = new Intent(MainActivity.this, ResultsActivity.class);
                 myIntent.putExtra(RECIPE_LIST_JSON, response); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
+                mProgressBar.setVisibility(View.GONE);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();

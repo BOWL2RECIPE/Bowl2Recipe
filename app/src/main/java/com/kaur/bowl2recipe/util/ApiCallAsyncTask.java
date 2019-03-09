@@ -2,26 +2,14 @@ package com.kaur.bowl2recipe.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
-import com.kaur.bowl2recipe.MainActivity;
-
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ByteArrayOutputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedInputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class ApiCallAsyncTask extends AsyncTask<Void,Void, String> {
     public static final String TAG = ApiCallAsyncTask.class.getSimpleName();
@@ -43,7 +31,7 @@ public class ApiCallAsyncTask extends AsyncTask<Void,Void, String> {
     @Override
     protected String doInBackground(Void... voids) {
         Context context = (Context) mOnAsyncCompleteListener;
-        String response = null; // = Util.loadJSONFromAsset(context);
+        String response = null;
         byte[] resByte = null;
         String result = null;
         HttpURLConnection urlConnection = null;
@@ -87,49 +75,6 @@ public class ApiCallAsyncTask extends AsyncTask<Void,Void, String> {
                 }
             }
             Log.e("API", "response: " + response);
-        } else {
-
-//            Bitmap bitmapObtained = mBitmap;
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            bitmapObtained.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-//            byte[] mByteArray = stream.toByteArray();
-//            String newString = new String(mByteArray);
-////            String mImageString = Base64.encodeToString(mByteArray, Base64.DEFAULT);
-//
-//            try {
-//                URL url = new URL(this.mPayload);
-//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//                conn.setRequestMethod("POST");
-//                conn.setDoOutput(true);
-//                conn.setDoInput(true);
-//
-//                OutputStream os = conn.getOutputStream();
-//                BufferedWriter writer = new BufferedWriter(
-//                        new OutputStreamWriter(os, "UTF-8"));
-//                Log.e("Api", newString);
-//                writer.write(newString);
-//
-//                writer.flush();
-//                writer.close();
-//                os.close();
-//                int responseCode=conn.getResponseCode();
-//
-//                if (responseCode == HttpsURLConnection.HTTP_OK) {
-//                    Log.d(TAG, "doInBackground: Successfull");
-//                    String line;
-//                    BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                    while ((line=br.readLine()) != null) {
-//                        response+=line;
-//                    }
-//                }
-//                else {
-//                    response="";
-//                }
-//                Log.d(TAG, "doInBackground: RESPONSE : " + response);
-//            } catch (Exception e) {
-//                Log.e(TAG, "doInBackground: " + e.getMessage() );
-//                e.printStackTrace();
-//            }
         }
         return response;
     }
