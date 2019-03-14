@@ -1,8 +1,11 @@
 package com.kaur.bowl2recipe;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -55,6 +58,16 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
     ImageView mCameraButton;
     ProgressBar mProgressBar;
 
+    public boolean isOnline(){
+        ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+        if(netInfo == null || !netInfo.isConnected()){
+            Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,12 +86,14 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
             public void onClick(View v) {
                 String recipeName = recipeNameEditText.getText().toString();
                 try{
-                    if (!TextUtils.isEmpty(recipeName)) {
-                        String recipeInfoUrl = String.format(RECIPE_INFO, getString(R.string.api_call), URLEncoder.encode(recipeName, "UTF-8"));
-                        ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeInfoUrl, true, null, MainActivity.this);
-                        apiCallAsyncTask.execute();
-                    } else {
-                        Toast.makeText(MainActivity.this, R.string.type_valid_dish, Toast.LENGTH_LONG).show();
+                    if(isOnline()) {
+                        if (!TextUtils.isEmpty(recipeName)) {
+                            String recipeInfoUrl = String.format(RECIPE_INFO, getString(R.string.api_call), URLEncoder.encode(recipeName, "UTF-8"));
+                            ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeInfoUrl, true, null, MainActivity.this);
+                            apiCallAsyncTask.execute();
+                        } else {
+                            Toast.makeText(MainActivity.this, R.string.type_valid_dish, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
                 catch (UnsupportedEncodingException e){
@@ -223,11 +238,10 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
 
     private void getRecipeName(Bitmap bitmap) {
         JSONObject imageJson = null;
-        mProgressBar.setVisibility(View.VISIBLE);
 
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             // Add the image
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, stream);
             byte[] imageArray = stream.toByteArray();
             String base64Image = Base64.encodeToString(imageArray, Base64.DEFAULT);
             Log.e(TAG, "[image content]" + base64Image);
@@ -237,50 +251,51 @@ public class MainActivity extends AppCompatActivity implements Util.OnAsyncCompl
             Log.e(TAG, "Exception Occured", e);
         }
 
-        JsonObjectRequest recipeNameRequest = new JsonObjectRequest(Request.Method.POST,
-                String.format(RECIPE_NAME, getString(R.string.api_call)), imageJson,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Log.e(TAG, "[Response]" + response.toString(2));
-                            String recipe_name_str = response.toString();
-                            JSONObject jsonResult = new JSONObject(recipe_name_str);
-                            JSONArray labels = jsonResult.getJSONArray("labels");
+        if (isOnline()) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            JsonObjectRequest recipeNameRequest = new JsonObjectRequest(Request.Method.POST,
+                    String.format(RECIPE_NAME, getString(R.string.api_call)), imageJson,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                Log.e(TAG, "[Response]" + response.toString(2));
+                                String recipe_name_str = response.toString();
+                                JSONObject jsonResult = new JSONObject(recipe_name_str);
+                                JSONArray labels = jsonResult.getJSONArray("labels");
 
-                            JSONObject c = labels.getJSONObject(0);
-                            String recipeName = c.getString("name");
+                                JSONObject c = labels.getJSONObject(0);
+                                String recipeName = c.getString("name");
 
-                            Log.e(TAG, "[Response]" + recipeName);
-                            try{
-                                if (!TextUtils.isEmpty(recipeName)) {
-                                    String recipeInfoUrl = String.format(RECIPE_INFO, getString(R.string.api_call), URLEncoder.encode(recipeName, "UTF-8"));
-                                    ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeInfoUrl, true, null, MainActivity.this);
-                                    apiCallAsyncTask.execute();
-                                } else {
-                                    Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();
+                                Log.e(TAG, "[Response]" + recipeName);
+                                try {
+                                    if (!TextUtils.isEmpty(recipeName)) {
+                                        String recipeInfoUrl = String.format(RECIPE_INFO, getString(R.string.api_call), URLEncoder.encode(recipeName, "UTF-8"));
+                                        ApiCallAsyncTask apiCallAsyncTask = new ApiCallAsyncTask(recipeInfoUrl, true, null, MainActivity.this);
+                                        apiCallAsyncTask.execute();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, R.string.dish_not_found, Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (UnsupportedEncodingException e) {
+                                    Log.e("Encoding", "Error Stack: " + e.getStackTrace());
                                 }
+                            } catch (JSONException e) {
+                                Log.e(TAG, "Exception Occured", e);
                             }
-                            catch (UnsupportedEncodingException e){
-                                Log.e("Encoding", "Error Stack: "+e.getStackTrace());
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Exception Occured", e);
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "Exception in request", error);
-                    }
-                });
-        requestQueue.add(recipeNameRequest);
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG, "Exception in request", error);
+                        }
+                    });
+            requestQueue.add(recipeNameRequest);
+        }
     }
 
     @Override
     public void onComplete(String response) {
-
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray jsonArray = new JSONArray(response);

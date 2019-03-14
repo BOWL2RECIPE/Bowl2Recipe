@@ -50,11 +50,16 @@ public class ApiCallAsyncTask extends AsyncTask<Void,Void, String> {
 
                 reader = new BufferedReader(new InputStreamReader(inputstream));
                 while ((response = reader.readLine()) != null) {
-                    Log.e("Response", "Line: " + response);
-                    buffer.append(response + "\n");
+                    if (response.contains("label")) {
+                        Log.e("Response", "Line: " + response);
+                        buffer.append(response + "\n");
+                    }
                 }
                 if (inputstream == null) {
                     Log.e("check", "" + inputstream);
+                    return null;
+                }
+                if (response == "[]\n") {
                     return null;
                 }
                 response = buffer.toString();

@@ -9,6 +9,7 @@
     <string name="api_call">https://bowl-recipe-95393.appspot.com/api</string>
     <string name="check_network">Please check your network connection.</string>
     <string name="type_valid_dish">Please type a valid dish name.</string>
+    <string name="no_internet"> No internet connection! Please check your internet.</string>
     <string name="dish_not_found">Dish not found. Please try with a different dish or image.</string>
     <string name="title_activity_recipe_view">RecipeViewActivity</string>
     <string name="large_text">
